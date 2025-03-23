@@ -21,6 +21,11 @@ class DisplayMode(Enum):
 
 
 ## DATA
+class Coordinates(NamedTuple):
+    x: int
+    y: int
+
+
 class BookMetadata(NamedTuple):
     title: str
     author: str

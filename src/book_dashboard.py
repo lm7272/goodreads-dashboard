@@ -39,9 +39,13 @@ def get_user_shelf_goodreads_books_metadata(
         GoodreadsBookMetadata(
             title=normalise_string(item.find("title").text),
             author=normalise_string(item.find("author_name").text),
-            user_read_at=map_goodreads_date_to_timestamp(item.find("user_read_at").text),
+            user_read_at=map_goodreads_date_to_timestamp(
+                item.find("user_read_at").text
+            ),
             user_added_at=map_goodreads_date_to_timestamp(
-                item.find("user_added_at").text if item.find("user_added_at") is not None else None
+                item.find("user_added_at").text
+                if item.find("user_added_at") is not None
+                else None
             ),
             book_cover_path=Path("/does/not/exist/"),
             book_cover_url=item.find("book_large_image_url").text,
@@ -93,7 +97,9 @@ def complete_book_metadata(
         ]
         if len(matching_calibre_books) == 1:
             matching_calibre_book = matching_calibre_books[0]
-            gr_book = gr_book._replace(book_cover_path=matching_calibre_book.book_cover_path)
+            gr_book = gr_book._replace(
+                book_cover_path=matching_calibre_book.book_cover_path
+            )
         elif not matching_calibre_books and gr_book.book_cover_url is not None:
             # download image locally
             img_data = requests.get(
@@ -129,29 +135,42 @@ def get_most_recent_goodreads_books(
     )[-limit:]
 
 
-def get_books(user_id: int, limit: int, shelf: GoodreadsShelf) -> list[GoodreadsBookMetadata]:
+def get_books(
+    user_id: int, limit: int, shelf: GoodreadsShelf
+) -> list[GoodreadsBookMetadata]:
     goodreads_books = get_most_recent_goodreads_books(user_id, limit, shelf)
     calibre_books = fetch_calibre_books_from_goodreads_metadata(goodreads_books)
 
     return complete_book_metadata(goodreads_books, calibre_books)
 
 
-if __name__ == "__main__":
-    load_env_file()
-    GOODREADS_USER_ID = get_goodreads_user_id()
-    goodreads_read_books = get_books(GOODREADS_USER_ID, 12, GoodreadsShelf.READ)
+def main() -> None:
+    goodreads_user_id = get_goodreads_user_id()
+    goodreads_read_books = get_books(goodreads_user_id, 12, GoodreadsShelf.READ)
     goodreads_currently_reading_books = get_books(
-        GOODREADS_USER_ID, 1, GoodreadsShelf.CURRENTLY_READING
+        goodreads_user_id, 1, GoodreadsShelf.CURRENTLY_READING
     )
 
-    current_book_path = get_cover_path(goodreads_currently_reading_books[0].book_cover_path)
+    current_book_path = get_cover_path(
+        goodreads_currently_reading_books[0].book_cover_path
+    )
     past_books = [
         get_cover_path(book.book_cover_path)
-        for book in sorted(goodreads_read_books, key=lambda x: x.user_read_at, reverse=True)
+        for book in sorted(
+            goodreads_read_books, key=lambda x: x.user_read_at, reverse=True
+        )
         if get_cover_path(book.book_cover_path)
     ]
     if not current_book_path or len(past_books) == 0:
         print("Missing book covers!")
         exit()
-    final_image = create_composite_image(current_book_path, past_books, get_display_size())
-    ENVIRONMENT_TO_DISPLAY_FUNCTION[DisplayMode.TEST](final_image, "viridis")  # Display on PC
+    final_image = create_composite_image(
+        current_book_path, past_books, get_display_size()
+    )
+    display_func = ENVIRONMENT_TO_DISPLAY_FUNCTION[DisplayMode.TEST]
+    display_func(final_image, "gray")  # Display the image
+
+
+if __name__ == "__main__":
+    load_env_file()
+    main()

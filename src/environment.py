@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from constants import DisplayMode
+from constants import Coordinates, DisplayMode
 
 
 def load_env_file(filepath=Path(".env")):
@@ -33,8 +33,8 @@ def get_calibre_db_path() -> Path:
     return get_calibre_library_path() / "metadata.db"
 
 
-def get_display_size() -> tuple[int, int]:
-    return (
+def get_display_size() -> Coordinates:
+    return Coordinates(
         int(os.getenv("EINK_DISPLAY_WIDTH", 800)),
         int(os.getenv("EINK_DISPLAY_HEIGHT", 480)),
     )
