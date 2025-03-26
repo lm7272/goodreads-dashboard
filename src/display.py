@@ -11,7 +11,7 @@ def create_composite_image(
     current_book: Path, past_books: list[Path], display_size: Coordinates
 ) -> Image.Image:
     """Generate the layout for the book covers."""
-    canvas = Image.new("1", display_size, 255)  # White background
+    canvas = Image.new("L", display_size, 255)  # White background
 
     # Load and place currently reading book
     current_img = Image.open(current_book).resize(Coordinates(250, 350))
@@ -30,7 +30,6 @@ def create_composite_image(
         if (index + 1) % cols == 0:  # New row
             x_offset = 300
             y_offset += book_size.y + 10
-
     return canvas
 
 

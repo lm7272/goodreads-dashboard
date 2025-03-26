@@ -26,7 +26,7 @@ def get_goodreads_user_id() -> int:
 
 
 def get_calibre_library_path() -> Path:
-    return Path(os.getenv("CALIBRE_LIBRARY_PATH"))
+    return Path(os.getenv("CALIBRE_LIBRARY_PATH", "/a/path/that/does/not/exist"))
 
 
 def get_calibre_db_path() -> Path:

@@ -70,11 +70,11 @@ def fetch_calibre_books_from_goodreads_metadata(
     books: list[tuple[int, str, str, str]] = cursor.fetchall()
     conn.close()
     calibre_books: list[BookMetadata] = []
-    tagged_book_author = []
+    tagged_author_title = []
     for title, author, book_path in books:
-        if (author, title) in tagged_book_author:
+        if (author, title) in tagged_author_title:
             continue
-        tagged_book_author.append((author, title))
+        tagged_author_title.append((author, title))
         calibre_books.append(
             BookMetadata(
                 title=normalise_string(title),
