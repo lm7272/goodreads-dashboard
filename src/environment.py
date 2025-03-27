@@ -19,10 +19,11 @@ def get_epd_type() -> str:
     return os.getenv("EPD_TYPE", "TEST")
 
 
-# No auto-loading here
-# Values are fetched dynamically at runtime
 def get_goodreads_user_id() -> int:
-    return os.getenv("GOODREADS_USER_ID")
+    return int(os.getenv("GOODREADS_USER_ID"))
+
+def get_number_of_read_books() -> int:
+    return int(os.getenv("NUM_BOOKS", 12))
 
 
 def get_calibre_library_path() -> Path:

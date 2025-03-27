@@ -1,5 +1,5 @@
+from typing import Optional
 from importlib import import_module
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,9 +9,11 @@ from constants import Coordinates
 
 # from waveshare_epd import epd7in5
 
+class EPDModuleError(Exception):
+    pass
 
 def create_composite_image(
-    current_book: Path,
+    current_book: Optional[Path],
     past_books: list[Path],
     display_size: Coordinates,
     max_cols: int = 4,
@@ -21,7 +23,9 @@ def create_composite_image(
 
     # Create blank canvas with white background
     canvas = Image.new("1", display_size, 255)
-
+    if not current_book:
+        current_book = past_books[0]
+        past_books = past_books[1:]
     # Calculate size for the currently reading book (scaled)
     current_img = Image.open(current_book)
     current_aspect = current_img.width / current_img.height
@@ -79,7 +83,7 @@ def create_composite_image(
     return canvas
 
 
-def display_image(image: Image.Image, *, epd_type: str) -> None:
+def display_covers(image: Image.Image, *, epd_type: str) -> None:
     if epd_type == "TEST":
         return simulate_display(image)
     # Dynamically import the correct EPD module
@@ -88,8 +92,8 @@ def display_image(image: Image.Image, *, epd_type: str) -> None:
         # Use the EPD class from the dynamically imported module
         epd = epd_module.EPD()
         print(f"Successfully imported {epd_type} driver.")
-    except ModuleNotFoundError:
-        print(f"Error: {epd_type} module not found.")
+    except Exception:
+        raise EPDModuleError(f"Error: {epd_type} module not able to be initialised correctly. Check EPD_TYPE is set correctly for your device.")
     epd.init()
     epd.Clear()
     epd.display(epd.buffer(image))
