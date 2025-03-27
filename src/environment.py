@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from constants import Coordinates, DisplayMode
+from constants import Coordinates
 
 
 def load_env_file(filepath=Path(".env")):
@@ -15,8 +15,8 @@ def load_env_file(filepath=Path(".env")):
                     os.environ[key] = value  # Set environment variable
 
 
-# Load environment variables when this module is imported
-load_env_file()
+def get_epd_type() -> str:
+    return os.getenv("EPD_TYPE", "TEST")
 
 
 # No auto-loading here
@@ -38,7 +38,3 @@ def get_display_size() -> Coordinates:
         int(os.getenv("EINK_DISPLAY_WIDTH", 800)),
         int(os.getenv("EINK_DISPLAY_HEIGHT", 480)),
     )
-
-
-def get_display_mode() -> DisplayMode:
-    return DisplayMode(os.getenv("EINK_DISPLAY_MODE"))

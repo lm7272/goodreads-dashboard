@@ -1,5 +1,5 @@
 from datetime import datetime
-from enum import Enum, auto
+from enum import Enum
 from pathlib import Path
 from typing import NamedTuple, Optional
 
@@ -14,10 +14,6 @@ class GoodreadsShelf(Enum):
     READ = "read"
     CURRENTLY_READING = "currently-reading"
     WANT_TO_READ = "want-to-read"
-
-
-class DisplayMode(Enum):
-    TEST = auto()
 
 
 ## DATA

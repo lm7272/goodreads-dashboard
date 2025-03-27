@@ -9,11 +9,10 @@ from constants import (
     DEFAULT_HEADERS,
     SHELF_TO_TIME_ATTRIBUTE_MAP,
     BookMetadata,
-    DisplayMode,
     GoodreadsBookMetadata,
     GoodreadsShelf,
 )
-from display import ENVIRONMENT_TO_DISPLAY_FUNCTION, create_composite_image
+from display import create_composite_image, simulate_display
 from environment import (
     get_calibre_db_path,
     get_calibre_library_path,
@@ -167,8 +166,8 @@ def main() -> None:
     final_image = create_composite_image(
         current_book_path, past_books, get_display_size()
     )
-    display_func = ENVIRONMENT_TO_DISPLAY_FUNCTION[DisplayMode.TEST]
-    display_func(final_image, "gray")  # Display the image
+
+    simulate_display(final_image, "gray")  # Display the image
 
 
 if __name__ == "__main__":

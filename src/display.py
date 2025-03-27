@@ -1,35 +1,80 @@
-from collections.abc import Callable
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from constants import Coordinates, DisplayMode
+from constants import Coordinates
+
+# from waveshare_epd import epd7in5
 
 
 def create_composite_image(
-    current_book: Path, past_books: list[Path], display_size: Coordinates
-) -> Image.Image:
-    """Generate the layout for the book covers."""
-    canvas = Image.new("L", display_size, 255)  # White background
+    current_book: Path,
+    past_books: list[Path],
+    display_size: Coordinates,
+    max_cols: int = 4,
+    padding: int = 10,
+):
+    """Generate a dynamic layout for book covers on different resolutions."""
 
-    # Load and place currently reading book
-    current_img = Image.open(current_book).resize(Coordinates(250, 350))
-    canvas.paste(current_img, Coordinates(20, 65))  # Positioned to the left
+    # Create blank canvas with white background
+    canvas = Image.new("1", display_size, 255)
 
-    # Load and place past books
-    x_offset, y_offset = 300, 20  # Starting position
-    book_size = Coordinates(100, 150)
-    cols = 4  # Books per row
+    # Calculate size for the currently reading book (scaled)
+    current_img = Image.open(current_book)
+    current_aspect = current_img.width / current_img.height
+    current_height = int(display_size[1] * 0.75)  # 50% of display height
+    current_width = int(current_height * current_aspect)
+    current_img = current_img.resize((current_width, current_height))
 
+    # Place currently reading book on the left
+    canvas.paste(current_img, (padding, (display_size.y - current_height) // 2))
+
+    # Calculate available space for past books
+    grid_x_start = current_width + 2 * padding  # Start past books after current book
+    grid_height = display_size.y - 2 * padding  # Height for past books
+
+    # Dynamically determine the best grid size
+    num_books = len(past_books)
+    cols = min(max_cols, num_books)  # Use max_cols or fewer if not enough books
+    rows = (num_books + cols - 1) // cols  # Calculate required rows
+
+    # Set a uniform height for past books
+    book_target_height = (grid_height - (rows - 1) * padding) // rows
+
+    # Determine book size dynamically
+    # book_size = Coordinates(x=(grid_width - (cols - 1) * padding) // cols, y=(grid_height - (rows - 1) * padding) // rows)
+    row_books = []
+    row_height = 0
+    # Place past books in a grid
+    x_offset, y_offset = grid_x_start, padding
     for index, book in enumerate(past_books):
-        img = Image.open(book).resize(book_size)
-        canvas.paste(img, Coordinates(x_offset, y_offset))
+        img = Image.open(book)
+        aspect = img.width / img.height
+        book_width = int(book_target_height * aspect)
+        img = img.resize((book_width, book_target_height))
 
-        x_offset += book_size.x + 10  # Move right
-        if (index + 1) % cols == 0:  # New row
-            x_offset = 300
-            y_offset += book_size.y + 10
+        # Track max row height for even spacing
+        row_books.append((img, x_offset, y_offset, book_width, book_target_height))
+        row_height = max(row_height, book_target_height)
+
+        # Move to next position
+        x_offset += book_width + padding
+
+        # If end of row, reset x_offset and move down
+        if (index + 1) % cols == 0 or index == num_books - 1:
+            # Paste all books in row (ensures even row spacing)
+            for img, x, y, w, h in row_books:
+                canvas.paste(
+                    img, (x, y + (row_height - h) // 2)
+                )  # Center vertically in row
+
+            # Reset row tracking
+            row_books = []
+            x_offset = grid_x_start
+            y_offset += row_height + padding
+            row_height = 0
+
     return canvas
 
 
@@ -38,8 +83,3 @@ def simulate_display(image: Image.Image, cmap: str) -> None:
     plt.imshow(image, cmap=cmap)
     plt.axis("off")
     plt.show()
-
-
-ENVIRONMENT_TO_DISPLAY_FUNCTION: dict[
-    DisplayMode, Callable[[Image.Image, str], None]
-] = {DisplayMode.TEST: simulate_display}
