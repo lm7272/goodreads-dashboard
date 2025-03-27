@@ -12,10 +12,11 @@ from constants import (
     GoodreadsBookMetadata,
     GoodreadsShelf,
 )
-from display import create_composite_image, simulate_display
+from display import create_composite_image, display_image
 from environment import (
     get_calibre_db_path,
     get_calibre_library_path,
+    get_epd_type,
     get_display_size,
     get_goodreads_user_id,
     load_env_file,
@@ -167,7 +168,7 @@ def main() -> None:
         current_book_path, past_books, get_display_size()
     )
 
-    simulate_display(final_image, "gray")  # Display the image
+    display_image(final_image, epd_type=get_epd_type())  # Display the image
 
 
 if __name__ == "__main__":

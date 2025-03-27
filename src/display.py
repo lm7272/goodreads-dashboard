@@ -1,3 +1,5 @@
+from importlib import import_module
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -43,7 +45,6 @@ def create_composite_image(
     book_target_height = (grid_height - (rows - 1) * padding) // rows
 
     # Determine book size dynamically
-    # book_size = Coordinates(x=(grid_width - (cols - 1) * padding) // cols, y=(grid_height - (rows - 1) * padding) // rows)
     row_books = []
     row_height = 0
     # Place past books in a grid
@@ -78,8 +79,24 @@ def create_composite_image(
     return canvas
 
 
-def simulate_display(image: Image.Image, cmap: str) -> None:
+def display_image(image: Image.Image, *, epd_type: str) -> None:
+    if epd_type == "TEST":
+        return simulate_display(image)
+    # Dynamically import the correct EPD module
+    try:
+        epd_module = import_module(f"waveshare_epd.{epd_type}")
+        # Use the EPD class from the dynamically imported module
+        epd = epd_module.EPD()
+        print(f"Successfully imported {epd_type} driver.")
+    except ModuleNotFoundError:
+        print(f"Error: {epd_type} module not found.")
+    epd.init()
+    epd.Clear()
+    epd.display(epd.buffer(image))
+
+
+def simulate_display(image: Image.Image) -> None:
     """Simulate the e-ink display on PC using Matplotlib."""
-    plt.imshow(image, cmap=cmap)
+    plt.imshow(image)
     plt.axis("off")
     plt.show()
