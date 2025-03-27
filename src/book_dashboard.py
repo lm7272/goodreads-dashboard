@@ -13,7 +13,7 @@ from constants import (
     GoodreadsBookMetadata,
     GoodreadsShelf,
 )
-from display import create_composite_image, display_covers
+from display import create_composite_image, display_image
 from environment import (
     get_calibre_db_path,
     get_calibre_library_path,
@@ -24,7 +24,7 @@ from environment import (
     load_env_file,
 )
 from exceptions import GoodreadsBookException
-from utils import map_goodreads_date_to_timestamp, normalise_string
+from src.misc_utils import map_goodreads_date_to_timestamp, normalise_string
 
 
 def get_user_shelf_goodreads_books_metadata(
@@ -193,7 +193,7 @@ def main() -> None:
         current_book_path, past_book_paths, get_display_size()
     )
 
-    display_covers(final_image, epd_type=get_epd_type())  # Display the image
+    display_image(final_image, epd_type=get_epd_type())  # Display the image
 
 
 if __name__ == "__main__":

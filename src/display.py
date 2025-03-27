@@ -8,8 +8,6 @@ from PIL import Image
 from constants import Coordinates
 from exceptions import EPDModuleError
 
-# from waveshare_epd import epd7in5
-
 def create_composite_image(
     current_book: Optional[Path],
     past_books: list[Path],
@@ -81,9 +79,9 @@ def create_composite_image(
     return canvas
 
 
-def display_covers(image: Image.Image, *, epd_type: str) -> None:
+def display_image(image: Image.Image, *, epd_type: str) -> None:
     if epd_type == "TEST":
-        return simulate_display(image)
+        return _simulate_display(image)
     # Dynamically import the correct EPD module
     try:
         epd_module = import_module(f"waveshare_epd.{epd_type}")
@@ -92,12 +90,15 @@ def display_covers(image: Image.Image, *, epd_type: str) -> None:
         print(f"Successfully imported {epd_type} driver.")
     except Exception:
         raise EPDModuleError(f"Error: {epd_type} module not able to be initialised correctly. Check EPD_TYPE is set correctly for your device.")
-    epd.init()
-    epd.Clear()
-    epd.display(epd.buffer(image))
+    try:
+        epd.init()
+        epd.Clear()
+        epd.display(epd.buffer(image))
+    except Exception as e:
+        EPDModuleError(f"Failed to use waveshare_epd to display image: {e}")
 
 
-def simulate_display(image: Image.Image) -> None:
+def _simulate_display(image: Image.Image) -> None:
     """Simulate the e-ink display on PC using Matplotlib."""
     plt.imshow(image)
     plt.axis("off")

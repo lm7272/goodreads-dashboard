@@ -18,7 +18,7 @@ class GoodreadsShelf(Enum):
     WANT_TO_READ = "want-to-read"
 
 
-## DATA
+## TUPLES
 class Coordinates(NamedTuple):
     x: int
     y: int
