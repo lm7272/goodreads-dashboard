@@ -6,11 +6,9 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 from constants import Coordinates
+from exceptions import EPDModuleError
 
 # from waveshare_epd import epd7in5
-
-class EPDModuleError(Exception):
-    pass
 
 def create_composite_image(
     current_book: Optional[Path],

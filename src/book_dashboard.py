@@ -23,6 +23,7 @@ from environment import (
     get_number_of_read_books,
     load_env_file,
 )
+from exceptions import GoodreadsBookException
 from utils import map_goodreads_date_to_timestamp, normalise_string
 
 
@@ -186,8 +187,8 @@ def main() -> None:
     past_book_paths = get_recently_read_book_cover_paths(goodreads_user_id=goodreads_user_id, number_of_read_books=number_of_read_books)
 
     if not past_book_paths:
-        print("Missing book covers!")
-        exit()
+        raise GoodreadsBookException("No read books found.")
+    
     final_image = create_composite_image(
         current_book_path, past_book_paths, get_display_size()
     )
