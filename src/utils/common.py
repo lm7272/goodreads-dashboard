@@ -3,7 +3,7 @@ from pathlib import Path
 import requests
 from unidecode import unidecode
 
-from book_dashboard.config.constants import DEFAULT_HEADERS
+from config.constants import DEFAULT_HEADERS
 
 
 def normalise_string(text: str) -> str:

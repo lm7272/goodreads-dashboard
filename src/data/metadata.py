@@ -1,23 +1,22 @@
 from pathlib import Path
 from typing import Optional, Union
 
-
-from book_dashboard.config.constants import (
+from config.constants import (
     BookMetadata,
     GoodreadsBookMetadata,
     GoodreadsShelf,
 )
-from book_dashboard.config.environment import (
+from config.environment import (
     get_calibre_library_path,
     get_local_image_dir,
 )
-from book_dashboard.data.calibre import (
+from data.calibre import (
     fetch_calibre_books_from_goodreads_metadata,
 )
-from book_dashboard.data.goodreads import (
+from data.goodreads import (
     get_most_recent_goodreads_books,
 )
-from book_dashboard.utils.common import (
+from utils.common import (
     download_image_from_url,
 )
 

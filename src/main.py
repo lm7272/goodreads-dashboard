@@ -1,4 +1,6 @@
-from book_dashboard.config.environment import (
+from display.epd_display import display_image
+
+from config.environment import (
     get_display_size,
     get_epd_type,
     get_goodreads_user_id,
@@ -6,12 +8,12 @@ from book_dashboard.config.environment import (
     get_number_of_rows,
     load_env_file,
 )
-from book_dashboard.config.exceptions import GoodreadsBookException
-from book_dashboard.data.metadata_utils import (
+from config.exceptions import GoodreadsBookException
+from data.metadata import (
     get_current_book_cover_path,
     get_recently_read_book_cover_paths,
 )
-from book_dashboard.display.display import create_composite_image, display_image
+from display.layout import create_composite_image
 
 
 def main() -> None:

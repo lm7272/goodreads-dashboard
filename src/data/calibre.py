@@ -3,8 +3,8 @@ from pathlib import Path
 
 from utils.common import normalise_string
 
-from book_dashboard.config.constants import BookMetadata, GoodreadsBookMetadata
-from book_dashboard.config.environment import get_calibre_db_path
+from config.constants import BookMetadata, GoodreadsBookMetadata
+from config.environment import get_calibre_db_path
 
 
 def get_calibre_books_from_db(

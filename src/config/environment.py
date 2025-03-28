@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from book_dashboard.config.constants import Coordinates
+from config.constants import Coordinates
 
 
 def load_env_file(filepath=Path(".env")):
@@ -47,4 +47,4 @@ def get_display_size() -> Coordinates:
 
 
 def get_local_image_dir() -> Path:
-    return Path(os.getenv("LOCAL_IMAGE_DIR"), "/tmp/cover_images")
+    return Path(os.getenv("LOCAL_IMAGE_DIR", "/tmp/cover_images"))

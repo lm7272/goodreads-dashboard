@@ -5,14 +5,14 @@ from typing import Optional
 
 import requests
 
-from book_dashboard.config.constants import (
+from config.constants import (
     DEFAULT_HEADERS,
     SHELF_TO_TIME_ATTRIBUTE_MAP,
     GoodreadsBookMetadata,
     GoodreadsShelf,
 )
-from book_dashboard.config.exceptions import GoodreadsBookException
-from book_dashboard.utils.common import normalise_string
+from config.exceptions import GoodreadsBookException
+from utils.common import normalise_string
 
 
 def _map_goodreads_date_to_timestamp(ts: Optional[str]) -> datetime:
