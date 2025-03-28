@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from constants import Coordinates
+from book_dashboard.config.constants import Coordinates
 
 
 def load_env_file(filepath=Path(".env")):
@@ -22,8 +22,13 @@ def get_epd_type() -> str:
 def get_goodreads_user_id() -> int:
     return int(os.getenv("GOODREADS_USER_ID"))
 
-def get_number_of_read_books() -> int:
-    return int(os.getenv("NUM_BOOKS", 12))
+
+def get_number_of_columns() -> int:
+    return int(os.getenv("NUM_COLS", 3))
+
+
+def get_number_of_rows() -> int:
+    return int(os.getenv("NUM_ROWS", 4))
 
 
 def get_calibre_library_path() -> Path:
@@ -39,3 +44,7 @@ def get_display_size() -> Coordinates:
         int(os.getenv("EINK_DISPLAY_WIDTH", 800)),
         int(os.getenv("EINK_DISPLAY_HEIGHT", 480)),
     )
+
+
+def get_local_image_dir() -> Path:
+    return Path(os.getenv("LOCAL_IMAGE_DIR"), "/tmp/cover_images")

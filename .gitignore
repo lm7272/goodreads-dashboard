@@ -5,6 +5,10 @@ build/
 dist/
 wheels/
 *.egg-info
+.vscode
+.ruff_cache
+
+docker-compose.debug.yaml
 
 # Virtual environments
 .venv

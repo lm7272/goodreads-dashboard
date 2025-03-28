@@ -1,12 +1,13 @@
-from typing import Optional
 from importlib import import_module
 from pathlib import Path
+from typing import Optional
 
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from constants import Coordinates
-from exceptions import EPDModuleError
+from book_dashboard.config.constants import Coordinates
+from book_dashboard.config.exceptions import EPDModuleError
+
 
 def create_composite_image(
     current_book: Optional[Path],
@@ -89,11 +90,15 @@ def display_image(image: Image.Image, *, epd_type: str) -> None:
         epd = epd_module.EPD()
         print(f"Successfully imported {epd_type} driver.")
     except Exception:
-        raise EPDModuleError(f"Error: {epd_type} module not able to be initialised correctly. Check EPD_TYPE is set correctly for your device.")
+        raise EPDModuleError(
+            f"Error: {epd_type} module not able to be initialised correctly. Check EPD_TYPE is set correctly for your device."
+        )
     try:
         epd.init()
         epd.Clear()
-        epd.display(epd.buffer(image))
+        Himage2 = Image.new("L", (epd.width, epd.height), 255)  # 255: clear the frame
+        Himage2.paste(image, (10, 10))
+        epd.display(epd.getbuffer(Himage2))
     except Exception as e:
         EPDModuleError(f"Failed to use waveshare_epd to display image: {e}")
 
