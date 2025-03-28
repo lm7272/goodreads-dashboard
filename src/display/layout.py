@@ -13,7 +13,7 @@ def create_composite_image(
     max_cols: int = 4,
     padding: int = 10,
     *,
-    image_mode: str = "1"
+    image_mode: str = "1",
 ) -> Image.Image:
     """Generate a dynamic layout for book covers on different resolutions."""
 
