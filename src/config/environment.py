@@ -20,7 +20,7 @@ def get_epd_type() -> str:
 
 
 def get_goodreads_user_id() -> int:
-    return int(os.getenv("GOODREADS_USER_ID"))
+    return int(os.getenv("GOODREADS_USER_ID", 12345678))
 
 
 def get_number_of_columns() -> int:

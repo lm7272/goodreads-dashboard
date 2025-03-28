@@ -12,7 +12,7 @@ from config.constants import (
     GoodreadsShelf,
 )
 from config.exceptions import GoodreadsBookException
-from utils.common import normalise_string
+from utils.common import get_item_text, get_item_text_with_raise, normalise_string
 
 
 def _map_goodreads_date_to_timestamp(ts: Optional[str]) -> datetime:
@@ -23,7 +23,7 @@ def _map_goodreads_date_to_timestamp(ts: Optional[str]) -> datetime:
 
 def get_goodreads_shelf_api_data(
     user_id: int, shelf: GoodreadsShelf
-) -> Optional[ET.Element]:
+) -> ET.Element:
     url = f"https://www.goodreads.com/review/list_rss/{user_id}?shelf={shelf.value}"
     response = requests.get(
         url,
@@ -43,18 +43,16 @@ def get_goodreads_metadata(
 
     return [
         GoodreadsBookMetadata(
-            title=normalise_string(item.find("title").text),
-            author=normalise_string(item.find("author_name").text),
+            title=normalise_string(get_item_text_with_raise(item, "title")),
+            author=normalise_string(get_item_text_with_raise(item, "author_name")),
             user_read_at=_map_goodreads_date_to_timestamp(
-                item.find("user_read_at").text
+                get_item_text("user_read_at")
             ),
             user_added_at=_map_goodreads_date_to_timestamp(
-                item.find("user_added_at").text
-                if item.find("user_added_at") is not None
-                else None
+                get_item_text("user_added_at")
             ),
             book_cover_path=Path("/does/not/exist/"),
-            book_cover_url=item.find("book_large_image_url").text,
+            book_cover_url=get_item_text(item, "book_large_image_url"),
         )
         for item in root.findall(".//item")
         if item is not None

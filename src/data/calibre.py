@@ -9,7 +9,7 @@ from config.environment import get_calibre_db_path
 
 def get_calibre_books_from_db(
     book_titles: tuple[str],
-) -> list[tuple[str, str, str, str]]:
+) -> list[tuple[str, str, str]]:
     db_path = get_calibre_db_path()
     if not db_path.exists():
         return []
@@ -19,7 +19,7 @@ def get_calibre_books_from_db(
         f"SELECT title, author_sort, path FROM books WHERE title in {book_titles}"
     )
 
-    books: list[tuple[int, str, str, str]] = cursor.fetchall()
+    books: list[tuple[str, str, str]] = cursor.fetchall()
     conn.close()
     return books
 

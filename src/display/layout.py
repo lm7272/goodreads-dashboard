@@ -27,10 +27,9 @@ def create_composite_image(
     current_aspect = current_img.width / current_img.height
     current_height = int(display_size[1] * 0.75)  # 75% of display height
     current_width = int(current_height * current_aspect)
-    current_img = current_img.resize((current_width, current_height))
 
     # Place currently reading book on the left
-    canvas.paste(current_img, (padding, (display_size.y - current_height) // 2))
+    canvas.paste(current_img.resize((current_width, current_height)), (padding, (display_size.y - current_height) // 2))
 
     # Calculate available space for past books
     grid_x_start = current_width + 2 * padding  # Start past books after current book
@@ -53,10 +52,9 @@ def create_composite_image(
         img = Image.open(book)
         aspect = img.width / img.height
         book_width = int(book_target_height * aspect)
-        img = img.resize((book_width, book_target_height))
 
         # Track max row height for even spacing
-        row_books.append((img, x_offset, y_offset, book_width, book_target_height))
+        row_books.append((img.resize((book_width, book_target_height)), x_offset, y_offset, book_width, book_target_height))
         row_height = max(row_height, book_target_height)
 
         # Move to next position
@@ -65,9 +63,9 @@ def create_composite_image(
         # If end of row, reset x_offset and move down
         if (index + 1) % cols == 0 or index == num_books - 1:
             # Paste all books in row (ensures even row spacing)
-            for img, x, y, w, h in row_books:
+            for _img, x, y, w, h in row_books:
                 canvas.paste(
-                    img, (x, y + (row_height - h) // 2)
+                    _img, (x, y + (row_height - h) // 2)
                 )  # Center vertically in row
 
             # Reset row tracking
