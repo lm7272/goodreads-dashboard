@@ -46,10 +46,10 @@ def get_goodreads_metadata(
             title=normalise_string(get_item_text_with_raise(item, "title")),
             author=normalise_string(get_item_text_with_raise(item, "author_name")),
             user_read_at=_map_goodreads_date_to_timestamp(
-                get_item_text("user_read_at")
+                get_item_text(item, "user_read_at")
             ),
             user_added_at=_map_goodreads_date_to_timestamp(
-                get_item_text("user_added_at")
+                get_item_text(item, "user_added_at")
             ),
             book_cover_path=Path("/does/not/exist/"),
             book_cover_url=get_item_text(item, "book_large_image_url"),
