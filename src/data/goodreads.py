@@ -21,9 +21,7 @@ def _map_goodreads_date_to_timestamp(ts: Optional[str]) -> datetime:
     return datetime.strptime(ts, "%a, %d %b %Y %H:%M:%S %z").replace(tzinfo=None)
 
 
-def get_goodreads_shelf_api_data(
-    user_id: int, shelf: GoodreadsShelf
-) -> ET.Element:
+def get_goodreads_shelf_api_data(user_id: int, shelf: GoodreadsShelf) -> ET.Element:
     url = f"https://www.goodreads.com/review/list_rss/{user_id}?shelf={shelf.value}"
     response = requests.get(
         url,

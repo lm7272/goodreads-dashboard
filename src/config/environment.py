@@ -48,3 +48,7 @@ def get_display_size() -> Coordinates:
 
 def get_local_image_dir() -> Path:
     return Path(os.getenv("LOCAL_IMAGE_DIR", "/tmp/cover_images"))
+
+
+def get_image_mode() -> str:
+    return os.getenv("IMAGE_MODE", "1")

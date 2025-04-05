@@ -1,10 +1,9 @@
 import sqlite3
 from pathlib import Path
 
-from utils.common import normalise_string
-
 from config.constants import BookMetadata, GoodreadsBookMetadata
 from config.environment import get_calibre_db_path
+from utils.common import normalise_string
 
 
 def get_calibre_books_from_db(

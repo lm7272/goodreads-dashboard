@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install required system dependencies
+# Mainly required to run waveshare
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip python3-dev python3-setuptools \
     libopenjp2-7 libtiff5-dev libjpeg-dev \

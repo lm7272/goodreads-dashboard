@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ```
 
 ### **3. Set Up Environment Variables**
-Create a `.env` file in the project root:
+Create a `.env` file in the project root. The `.env.sample` in the repo gives all possible environment variables.
 ```bash
 GOODREADS_USER_ID=your_user_id
 CALIBRE_DB_PATH=/path/to/calibre/library # OPTIONAL
@@ -65,6 +65,12 @@ python src/main.py
 ```sh
 docker build -t book-dashboard .
 ```
+
+On the Raspberry Pi Zero the network timeout can cause issues with TLS handshakes. If you run into this consider changing to a faster DNS, i.e.
+```sh
+sudo nano /etc/resolve.conf
+```
+and add in `nameserver 8.8.8.8` to the file before trying to rebuild.
 
 ### **2. Run the Container**
 ```sh
