@@ -1,0 +1,2 @@
+# Run your Python script every 6 hours
+0 */6 * * * python /app/src/main.py >> /var/log/cron.log 2>&1

@@ -8,7 +8,15 @@ Python-based project that displays a dashboard of book cover images on an e-ink 
 - Integrated with Calibre to pick up covers locally. Falls back to downloading covers from Goodreads.
 - Displays book covers dynamically on an e-ink display.
 - Supports custom layouts.
-- Runs on a Raspberry Pi Zero 2 with Waveshare e-Paper displays.
+- Runs on a Raspberry Pi with Waveshare e-Paper displays.
+
+![dash preview](./img/dash.jpg)
+
+## Raspberry Pi Setup
+Ensure SPI is enabled on the Pi:
+```sh
+sudo raspi-config  # Enable SPI under 'Interfacing Options'
+```
 
 ## Installation
 ### **1. Clone the Repository**
@@ -61,12 +69,6 @@ docker build -t book-dashboard .
 ### **2. Run the Container**
 ```sh
 docker run --rm --env-file .env book-dashboard
-```
-
-## Raspberry Pi Setup
-Ensure SPI is enabled on the Pi:
-```sh
-sudo raspi-config  # Enable SPI under 'Interfacing Options'
 ```
 
 To run the app on startup, add this to `crontab -e`:
