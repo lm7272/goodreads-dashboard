@@ -61,6 +61,7 @@ python src/main.py
 ```
 
 ## Deployment with Docker
+Note that this currently takes a long time to build due to needing a lot of system dependencies to correctly run `spidev` as well as cloning and compiling the waveshare dependencies. Will try to get this build time down at some point.
 ### **1. Build the Docker Image**
 ```sh
 docker build -t book-dashboard .
